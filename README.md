@@ -1,5 +1,5 @@
 # FiberPhix
-Python fiber photometry data analysis tool. READS TDT TANK FILES.
+Python fiber photometry data collection tool. READS TDT TANK FILES. 
 
 
 #FiberPhixDAT_MainInfo: pulls all the main stream and epoc info (i.e., the names of the streams/epoc) for entry into the 'user values' spreadsheet (GUI to come...).
@@ -24,9 +24,10 @@ is used by all scripts.
 
 #Suggested file structure:
 (Root)
--(File) FiberPhixDAT
--(File) FiberPhixDAT_MainInfo
--(File) FiberPhixDAT_Epocs
+-(File) FiberPhixDAT.py
+-(File) FiberPhixDAT_MainInfo.py
+-(File) FiberPhixDAT_Epocs.py
+-(File) User Values.xlsx
 -(Folder) Figures <--- Holds graphs generated from above
 -(Folder) Data <--- Where you will add the tank file of interest
 -(Folder) IDs <--- Where the excel file from 'FiberPhixDAT_MainInfo' will be created
