@@ -16,3 +16,14 @@ FiberPhixDAT_Epocs: Using the 'User Values' spreadsheet, one can identify the ep
 2) output file paths for graphs
 3) out file path for FiberPhixDAT_MainInfo (where you'll store the available session stream/epoc ID's)
 4) the 'User Values' spreadsheet for the relevant measures
+
+
+
+#Suggested file structure:
+(Root)
+-(File) FiberPhixDAT
+-(File) FiberPhixDAT_MainInfo
+-(File) FiberPhixDAT_Epocs
+-(Folder) Figures <--- Holds graphs generated from above
+-(Folder) Data <--- Where you will add the tank file of interest
+-(Folder) IDs <--- Where the excel file from 'FiberPhixDAT_MainInfo' will be created
