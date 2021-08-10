@@ -11,6 +11,9 @@ Python fiber photometry data analysis tool. READS TDT TANK FILES.
 FiberPhixDAT_Epocs: Using the 'User Values' spreadsheet, one can identify the epocs of interest, window centering size (time pre/post epoc). Ultimately collects data,
 #analyzes (using similar methods to FiberPhixDAT) and graphs using a seaborn heatmap for easy visualization.
 
+User Values SS: Currently used as the place to adjust values for FiberPhixDAT, such as identifying the signal stream, the control stream, time to cut off, etc. This spreadsheet
+is used by all scripts.
+
 #Things the user must change:
 1) file paths for 'User Values' spreadsheet
 2) output file paths for graphs
