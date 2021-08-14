@@ -5,7 +5,7 @@ import numpy as np
 
 
 #Import the user entry spreadsheet (i.e. 'User Values') for use to create variables
-entry_df= pd.ExcelFile('PATH TO USER ENTRY SPREADSHEET' + '.xlsx').parse()
+entry_df= pd.ExcelFile('PATH TO USER VALUES LOCATION\\User Values' + '.xlsx').parse()
 
 
 #Pull variable names from the user entry spreadsheet
@@ -24,14 +24,33 @@ class Main_Info():
         self.streams = self.data.streams
         self.epocs = self.data.epocs
         self.blockname = self.data.info.blockname
+        self.session_length = self.data.info.duration.seconds
+
+class Get_Epocs():
+    
+    def __init__ (self, epoc_info):
+        self.epoc_info = epoc_info
+        self.epoc_names = list(self.epoc_info.keys())
+        
+    def all_epoc_info(self):
+        self.info_by_epoc = []
+        for i in self.epoc_names:
+            self.info_by_epoc.append(self.epoc_info[i])
+        self.df_builder = dict(zip(self.epoc_names,self.info_by_epoc))
         
 #Main --> gathers data from both  streams/epocs, converts to pandas dataframe and exports to excel        
 information = Main_Info(path_to_file)
 information.get_main_info()
 
-stream_id_df = pd.DataFrame(information.streams.keys(), columns = ['Stream IDs Available'])
-epoc_id_df = pd.DataFrame(information.epocs.keys(), columns = ['Epoc IDs Available'])
+epocs = Get_Epocs(information.epocs)
+epocs.all_epoc_info()
 
-with pd.ExcelWriter(f'PATH TO THE FOLDER TO STORE IDS' + '.xlsx') as writer:
+stream_id_df = pd.DataFrame([[list(information.streams.keys()),information.session_length]], columns = [['Stream IDs Available', 'Session Length (Seconds)']])
+epoc_df = pd.DataFrame(epocs.df_builder)
+
+with pd.ExcelWriter(f'PATH TO SAVE LOCATION\\Information from {information.blockname}.xlsx') as writer:
     stream_id_df.to_excel(writer, sheet_name = 'Stream IDs')
-    epoc_id_df.to_excel(writer, sheet_name = 'Epoc IDs')
+    for i in epocs.epoc_names:
+        df = pd.DataFrame(list(zip(epocs.epoc_info[i]['data'], epocs.epoc_info[i]['onset'], epocs.epoc_info[i]['offset'])),
+                          columns = ['Port', 'Onsets', 'Offsets'])
+        df.to_excel(writer, sheet_name = f'EPOC {i}')
