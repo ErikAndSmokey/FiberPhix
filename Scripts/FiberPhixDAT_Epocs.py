@@ -10,7 +10,7 @@ from scipy import stats
 
 
 #Import the user entry spreadsheet (i.e. 'User Values') for use to create variables
-entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET!').parse() #Update with file path to 'User Values' spreadsheet
+entry_df= pd.ExcelFile('PATH TO USER ENTRY SPREADSHEET\\User Values.xlsx').parse() #Update with file path to 'User Values' spreadsheet
 
 #Pull variable names from the user entry spreadsheet
 path_to_file = str(entry_df['Path to tank file'][0])
@@ -19,31 +19,31 @@ control_ch_name = str(entry_df['Control Channel ID'][0])
 time_pre_epoc = int(entry_df['Time to grab before each epoc (seconds)'][0])
 time_post_epoc = int(entry_df['Time to grab after each epoc (seconds)'][0])
 epoc_name = str(entry_df['Epoc ID'][0])
-eoi_num = int(entry_df['Epoc Type to grab?']) #The epoc type of interest... for centering around that type of epoc later
-
+eoi_port = entry_df['Epoc Port to grab?'][0] #The epoc type of interest... for centering around that type of epoc later
+eoi_type = entry_df['Epoc Type?'][0]
 
 #Instantiating this class gathers all the available epocs under a given epoc name, with a separate
 #module that allows the user to define a epoc of interest (via number in 'User Values' spreadsheet)
 class All_Epocs():
 
-    def __init__(self, path_to_file,epoc_name,eoi_num):
+    def __init__(self, path_to_file,epoc_name,eoi_port):
         self.path = path_to_file
         self.name = epoc_name
         self.data = tdt.read_block(self.path)
-        self.eoi = eoi_num
+        self.eoi = eoi_port
         #Makes a DF of all onsets/offsets/types of epocs under a given epoc name
     def make_epoc_df(self):
         self.all_epocs_df_builder = {'Epoc Data':self.data.epocs[self.name]['data'],
                                     'Onsets':self.data.epocs[self.name]['onset'],
                                     'Offsets':self.data.epocs[self.name]['offset']}
         self.all_epocs_df = pd.DataFrame(self.all_epocs_df_builder)
-        self.types_of_epocs = [int(i) for i in list(self.all_epocs_df['Epoc Data'].unique())]
-        self.values_epoc_dict = dict(zip(self.types_of_epocs,list(range(1,(len(self.types_of_epocs)+1)))))
-        self.all_epocs_df['Epoc ID Number'] = self.all_epocs_df['Epoc Data'].map(self.values_epoc_dict)
         #Isoate a subset of those epocs by epoc_num <-- taken from 'User Values', use int only...
         #Created list of available epocs in make_epoc_df
     def isolate_epoc_type(self):
-        self.eoi_df = self.all_epocs_df[self.all_epocs_df['Epoc ID Number'] == self.eoi]
+        if str(self.eoi).upper() == 'ALL':
+            self.eoi_df = self.all_epocs_df
+        else:
+            self.eoi_df = self.all_epocs_df[self.all_epocs_df['Epoc Data'] == self.eoi]
 
 
 
@@ -118,12 +118,13 @@ class EOI_Tools():
         plt.xticks(ticks= xticks,labels = xticklabels)
         plt.xlabel('Time (Seconds)')
         plt.ylabel('Trial (# w/n Session)')
+        plt.title(eoi_type.upper())
         plt.tight_layout()
     
             
         
 
-get_epocs = All_Epocs(path_to_file, epoc_name, eoi_num)
+get_epocs = All_Epocs(path_to_file, epoc_name, eoi_port)
 get_epocs.make_epoc_df()
 get_epocs.isolate_epoc_type()
 
@@ -132,4 +133,4 @@ get_epocs.isolate_epoc_type()
 analyze_eoi= EOI_Tools(path_to_file, exp_ch_name, control_ch_name, time_pre_epoc, time_post_epoc, get_epocs.eoi_df)
 analyze_eoi.data_by_epoc()
 analyze_eoi.heatmapper()
-plt.savefig('PATH TO FIGURE SAVE LOCATION' + '.png', dpi = 600) #Leave in to save heatmap to given location
+plt.savefig(f'PATH FOR FIGURE SAVING\\{get_epocs.data.info.blockname} {eoi_type.upper()}.png', dpi = 600) #Leave in to save heatmap to given location
