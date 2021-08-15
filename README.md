@@ -27,11 +27,19 @@ is used by all scripts.
 
 **Suggested file structure**:
 (Root)
+
 -(File) FiberPhixDAT.py
+
 -(File) FiberPhixDAT_MainInfo.py
+
 ***NEW***-(File) FiberPhixDAT_BatchMainInfo.py
+
 -(File) FiberPhixDAT_Epocs.py
+
 -(File) User Values.xlsx
+
 -(Folder) Figures <--- Holds graphs generated from above
+
 -(Folder) Data <--- Where you will add the tank file(s) of interest
+
 -(Folder) IDs <--- Where the excel file from 'FiberPhixDAT_MainInfo' will be created
