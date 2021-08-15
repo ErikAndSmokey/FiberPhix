@@ -10,7 +10,7 @@ from scipy import stats
 
 
 #Import the user entry spreadsheet (i.e. 'User Values') for use to create variables
-entry_df= pd.ExcelFile('PATH TO USER ENTRY SPREADSHEET\\User Values.xlsx').parse() #Update with file path to 'User Values' spreadsheet
+entry_df= pd.ExcelFile('C:\\PATH TO USER VALUES SS\\User Values.xlsx').parse() #Update with file path to 'User Values' spreadsheet
 
 #Pull variable names from the user entry spreadsheet
 path_to_file = str(entry_df['Path to tank file'][0])
@@ -50,7 +50,7 @@ class All_Epocs():
 #After isolating your epoc type of interest    
 class EOI_Tools():
     
-    def __init__(self,path_to_file, exp_ch, control_ch, pre_epoc_time, post_epoc_time, eoi_df):
+    def __init__(self,path_to_file, exp_ch, control_ch, pre_epoc_time, post_epoc_time, eoi_df, blockname):
         self.exp = exp_ch
         self.control = control_ch
         self.pre = pre_epoc_time
@@ -58,6 +58,7 @@ class EOI_Tools():
         self.path = path_to_file
         self.eoi_df = eoi_df
         self.onsets = list(self.eoi_df['Onsets'])
+        self.blockname = blockname
         
    #iterates through all onsets, centering on user defined legnths pre and post epoc (taken from 'User Values').     
     def data_by_epoc(self):
@@ -70,7 +71,7 @@ class EOI_Tools():
         self.min_time = min(len(i) for i in self.lengths)
         self.times = self.lengths[0][:self.min_time]
         self.data = []
-    #iterates through all onsets, centering on user defined legnths pre and post epoc (taken from 'User Values').
+    #iterates through all onsets, centering on user defined legnths pre and post epoc (taken from 'User Values'). The following method is similar to that of what is used in FiberPhixDAT
         for i in self.onsets:
             reader = tdt.read_block(self.path, t1 = (i-self.pre), t2 = (i+(self.post + 0.1)))
             temp_exp_data = reader.streams[self.exp]['data']
@@ -116,12 +117,51 @@ class EOI_Tools():
         fig,axes = plt.subplots(figsize = (24,12))
         sns.heatmap(self.eoi_data_df, cmap = 'viridis') #Plot data via Seaborn
         plt.xticks(ticks= xticks,labels = xticklabels)
-        plt.xlabel('Time (Seconds)')
-        plt.ylabel('Trial (# w/n Session)')
-        plt.title(eoi_type.upper())
+        plt.xlabel('Time (Seconds)', fontsize = 24)
+        plt.ylabel('Trial (# w/n Session)', fontsize = 24)
+        plt.title(eoi_type.upper(), fontsize = 24)
+        plt.tick_params(labelsize = 16)
         plt.tight_layout()
+        plt.savefig(f'C:\\PATH TO FIGURE SAVE LOCATION\\Figures\\{get_epocs.data.info.blockname} {eoi_type.upper()} Heatmap.png', dpi = 600) #Leave in to save heatmap to given location
     
-            
+
+    #Must-call for the following two methods (they are dependent on the creation of average_df)
+    def avg_df_maker(self):
+        self.average_df = pd.DataFrame(self.eoi_data_df.mean())
+        self.average_df.reset_index(inplace=True)
+        self.average_df.rename(columns = {'index': 'Time (Seconds)', 0: 'Avg. Z-Score'}, inplace = True)
+
+
+    #Lineplot of average signal across all trails centered around the epoc event
+    def avg_lineplt(self):
+        average_df = pd.DataFrame(self.eoi_data_df.mean())
+        average_df.reset_index(inplace=True)
+        average_df.rename(columns = {'index': 'Time (Seconds)', 0: 'Avg. Z-Score'}, inplace = True)
+
+        plt.figure(figsize = (24,18))
+        plt.plot(self.average_df['Time (Seconds)'], self.average_df['Avg. Z-Score'],)
+        plt.plot(self.pre, 0.5, marker = 'o', markersize= 20.0)
+        plt.xlabel('Time (Seconds)', fontsize = 24)
+        plt.ylabel('Avg. Normalized F/f (Z-Score)' , fontsize = 24)
+        plt.title(f'AVERAGE {eoi_type.upper()}', fontsize= 24)
+        plt.tick_params(labelsize = 20)
+        plt.tight_layout()
+        plt.savefig(f'C:\\PATH TO FIGURE SAVE LOCATION\\Figures\\Average {eoi_type} Traces for {self.blockname}.png', dpi = 600)
+    
+
+    #All traces centered around the epoc event
+    def all_epoc_traces(self):
+        fig,axes = plt.subplots(figsize = (24,18))
+        for i in range(len(self.eoi_data_df)):
+            plt.plot(self.eoi_data_df.iloc[i])
+        plt.plot(self.pre, 0.5, marker = 'o', markersize= 30.0, markerfacecolor = 'r')
+        plt.xlabel('Time (Seconds)', fontsize = 24)
+        plt.ylabel('Avg. Normalized F/f (Z-Score)', fontsize = 24)
+        plt.title(f'ALL {eoi_type.upper()} TRACES', fontsize = 24)
+        plt.tick_params(labelsize = 20)
+        plt.tight_layout()
+        plt.savefig(f'C:\\PATH TO FIGURE SAVE LOCATION\\Figures\\All {eoi_type} Traces for {self.blockname}.png', dpi = 600)
+
         
 
 get_epocs = All_Epocs(path_to_file, epoc_name, eoi_port)
@@ -130,7 +170,9 @@ get_epocs.isolate_epoc_type()
 
 
 
-analyze_eoi= EOI_Tools(path_to_file, exp_ch_name, control_ch_name, time_pre_epoc, time_post_epoc, get_epocs.eoi_df)
+analyze_eoi= EOI_Tools(path_to_file, exp_ch_name, control_ch_name, time_pre_epoc, time_post_epoc, get_epocs.eoi_df, get_epocs.data.info.blockname)
 analyze_eoi.data_by_epoc()
 analyze_eoi.heatmapper()
-plt.savefig(f'PATH FOR FIGURE SAVING\\{get_epocs.data.info.blockname} {eoi_type.upper()}.png', dpi = 600) #Leave in to save heatmap to given location
+analyze_eoi.avg_df_maker()
+analyze_eoi.avg_lineplt()
+analyze_eoi.all_epoc_traces()
