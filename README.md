@@ -5,13 +5,13 @@ Python fiber photometry data collection tool. READS TDT TANK FILES.
 
 
 
-**-FiberPhixDAT_MainInfo**: pulls all the main stream and epoc info (i.e., the names of the streams/epoc) for entry into the 'user values' spreadsheet. ***NEW*** Exported spreadsheet includes all epoc information for user comprehension of acquired data.
+**FiberPhixDAT_MainInfo**: pulls all the main stream and epoc info (i.e., the names of the streams/epoc) for entry into the 'user values' spreadsheet. ***NEW*** Exported spreadsheet includes all epoc information for user comprehension of acquired data.
 
 
-***NEW*** FiberPhixDAT_BatchMainInfo: Same functionality as _MainInfo_, but allows for iteration over multiple tank files, producing an information spreadsheet for each tank. 
+***NEW*** **FiberPhixDAT_BatchMainInfo**: Same functionality as _MainInfo_, but allows for iteration over multiple tank files, producing an information spreadsheet for each tank. 
 
 
-**-FiberPhixDAT**: In the 'User Values' spreadsheet, a user defines the signal channel and control channel (typically isosbestic channel). FiberPhixDAT then measures
+**FiberPhixDAT**: In the 'User Values' spreadsheet, a user defines the signal channel and control channel (typically isosbestic channel). FiberPhixDAT then measures
 the change in signal vs. isosbestic. The 'User Values' spreadsheet also allows for the adjustment of window size so that the beginning and ends of sessions can be cut off.
 Data is plotted via matplotlib at 600 dpi.
 
