@@ -27,7 +27,10 @@ Python fiber photometry data collection tool. READS TDT TANK FILES.
 
 
 ***UPDATED!*** **Suggested file structure**:
+
 (Root)
+
+
 -(File) FiberPhix.py
 
 -(File) User Values.xlsx
