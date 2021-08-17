@@ -11,6 +11,8 @@ from scipy import stats
 
 
 
+PATH_TO_USER_VALUES = 'PATH TO USER VALUES SPREADSHEET!\\User Values.xlsx'
+
 
 #Class for grabbing the stream Id's and epoc Id's
 class Main_Info():
@@ -258,7 +260,7 @@ class EOI_Tools():
 
 def streams():
 
-    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -298,7 +300,7 @@ def streams():
 
 def epocs():
 
-    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -332,7 +334,7 @@ def epocs():
 
 def getinfo():
 
-    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -346,7 +348,8 @@ def getinfo():
     epocs = Get_Epocs(epoc_info= information.epocs)
     epocs.all_epoc_info()
 
-    stream_id_df = pd.DataFrame([[list(information.streams.keys()),information.session_length]], columns = [['Stream IDs Available', 'Session Length (Seconds)']])
+    stream_id_df = pd.DataFrame([[list(information.streams.keys()),information.session_length]], 
+                                columns = [['Stream IDs Available', 'Session Length (Seconds)']])
     epoc_df = pd.DataFrame(epocs.df_builder)
 
     with pd.ExcelWriter(infosaveloc + f'\\Information from {information.blockname}.xlsx') as writer:
@@ -358,7 +361,7 @@ def getinfo():
 
 def batchinfo():
 
-    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -372,7 +375,8 @@ def batchinfo():
         epocs = Get_Epocs(epoc_info= information.epocs)
         epocs.all_epoc_info()
 
-        stream_id_df = pd.DataFrame([[list(information.streams.keys()),information.session_length]], columns = [['Stream IDs Available', 'Session Length (Seconds)']])
+        stream_id_df = pd.DataFrame([[list(information.streams.keys()),information.session_length]],
+                                     columns = [['Stream IDs Available', 'Session Length (Seconds)']])
         epoc_df = pd.DataFrame(epocs.df_builder)
 
         with pd.ExcelWriter(infosaveloc+ f'\\Information from {information.blockname}' + '.xlsx') as writer:
