@@ -258,7 +258,7 @@ class EOI_Tools():
 
 def streams():
 
-    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -298,7 +298,7 @@ def streams():
 
 def epocs():
 
-    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -332,7 +332,7 @@ def epocs():
 
 def getinfo():
 
-    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
@@ -358,7 +358,7 @@ def getinfo():
 
 def batchinfo():
 
-    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET\\User Values.xlsx').parse()
     path_to_data = str(entry_df['Path to tank file'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
