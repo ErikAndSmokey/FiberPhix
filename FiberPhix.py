@@ -10,30 +10,6 @@ from scipy import signal
 from scipy import stats
 
 
-#USER MUST UPDATE THE PATH FOR ENTRY_DF FOR FIBERPHIX TO WORK!
-entry_df= pd.ExcelFile('PATH TO USER VALUES.xlsx').parse()
-
-
-
-
-
-
-#Variables are updated based on the information added to the 'User Values' spreadsheet
-path_to_data = str(entry_df['Path to tank file'][0])
-exp_ch_name = str(entry_df['Signal Channel ID'][0])
-control_ch_name = str(entry_df['Control Channel ID'][0])
-start_of_stream_section = int(entry_df['Time to cut off beginning (seconds)'][0])
-end_of_stream_section = int(entry_df['Time to cut off end (seconds)'][0])
-#lowess_fraction = entry_df['LOWESS Fraction***'][0]
-lowess_fraction= 0.001
-figsaveloc = str(entry_df['Path to tank file'][6])
-time_pre_epoc = int(entry_df['Time to grab before each epoc (seconds)'][0])
-time_post_epoc = int(entry_df['Time to grab after each epoc (seconds)'][0])
-epoc_name = str(entry_df['Epoc ID'][0])
-eoi_port = entry_df['Epoc Port to grab?'][0] #The epoc type of interest... for centering around that type of epoc later
-eoi_type = entry_df['Epoc Type?'][0]
-infosaveloc = entry_df['Path to tank file'][4]
-dir_for_batch_info = entry_df['Path to tank file'][2]
 
 
 #Class for grabbing the stream Id's and epoc Id's
@@ -281,6 +257,18 @@ class EOI_Tools():
 
 
 def streams():
+
+    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    path_to_data = str(entry_df['Path to tank file'][0])
+    exp_ch_name = str(entry_df['Signal Channel ID'][0])
+    control_ch_name = str(entry_df['Control Channel ID'][0])
+    start_of_stream_section = int(entry_df['Time to cut off beginning (seconds)'][0])
+    end_of_stream_section = int(entry_df['Time to cut off end (seconds)'][0])
+    #lowess_fraction = entry_df['LOWESS Fraction***'][0]
+    lowess_fraction= 0.001
+    figsaveloc = str(entry_df['Path to tank file'][6])
+
+
     #Create your signal stream object
     exp_stream = StreamData(data_file_path = path_to_data,
                                 start_cut = start_of_stream_section,
@@ -309,6 +297,18 @@ def streams():
 
 
 def epocs():
+
+    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    path_to_data = str(entry_df['Path to tank file'][0])
+    exp_ch_name = str(entry_df['Signal Channel ID'][0])
+    control_ch_name = str(entry_df['Control Channel ID'][0])
+    time_pre_epoc = int(entry_df['Time to grab before each epoc (seconds)'][0])
+    time_post_epoc = int(entry_df['Time to grab after each epoc (seconds)'][0])
+    epoc_name = str(entry_df['Epoc ID'][0])
+    eoi_port = entry_df['Epoc Port to grab?'][0] #The epoc type of interest... for centering around that type of epoc later
+    eoi_type = entry_df['Epoc Type?'][0]
+
+
     get_epocs = All_Epocs(path_to_file = path_to_data, 
                             epoc_name = epoc_name, 
                             eoi_port = eoi_port)
@@ -331,6 +331,14 @@ def epocs():
 
 
 def getinfo():
+
+    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    path_to_data = str(entry_df['Path to tank file'][0])
+    exp_ch_name = str(entry_df['Signal Channel ID'][0])
+    control_ch_name = str(entry_df['Control Channel ID'][0])
+    infosaveloc = entry_df['Path to tank file'][4]
+
+
     #Main --> gathers data from both  streams/epocs, converts to pandas dataframe and exports to excel        
     information = Main_Info(path_to_file= path_to_data)
     information.get_main_info()
@@ -349,6 +357,14 @@ def getinfo():
             df.to_excel(writer, sheet_name = f'EPOC {i}')
 
 def batchinfo():
+
+    entry_df= pd.ExcelFile('C:\\Users\\evannewenhizen\\Desktop\\Fiber Photo Dev\\User Values.xlsx').parse()
+    path_to_data = str(entry_df['Path to tank file'][0])
+    exp_ch_name = str(entry_df['Signal Channel ID'][0])
+    control_ch_name = str(entry_df['Control Channel ID'][0])
+    infosaveloc = entry_df['Path to tank file'][4]
+    dir_for_batch_info = entry_df['Path to tank file'][2]
+
     for i in os.listdir(dir_for_batch_info):
         information = Main_Info(path_to_file= (str(dir_for_batch_info + '/' + i)))
         information.get_main_info()
