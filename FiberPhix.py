@@ -11,7 +11,7 @@ from scipy import stats
 
 
 #USER MUST UPDATE THE PATH FOR ENTRY_DF FOR FIBERPHIX TO WORK!
-entry_df= pd.ExcelFile('PATH TO USER VALUES.xlsx').parse()
+entry_df= pd.ExcelFile('PATH TO USER VALUES SPREADSHEET!.xlsx').parse()
 
 
 
