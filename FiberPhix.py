@@ -10,7 +10,11 @@ from scipy import stats
 from scipy.ndimage.filters import uniform_filter1d
 
 
-PATH_TO_USER_VALUES = os.getcwd() + '\\User Values.xlsx'
+root_folder = os.getcwd()
+PATH_TO_USER_VALUES = root_folder + '\\User Values.xlsx'
+data_folder = root_folder + '\\Data'
+ids_folder = root_folder + '\\IDs'
+figures_folder = root_folder + '\\Figures'
 
 
 #Class for grabbing the stream Id's and epoc Id's
@@ -44,10 +48,10 @@ class Get_Epocs():
 def getinfo():
 
     entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
-    path_to_data = str(entry_df['Path to tank file'][0])
+    path_to_data = data_folder + '\\' + str(entry_df['Tank File Name'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
-    infosaveloc = entry_df['Path to tank file'][4]
+    infosaveloc = ids_folder
 
 
     #Main --> gathers data from both  streams/epocs, converts to pandas dataframe and exports to excel        
@@ -71,11 +75,11 @@ def getinfo():
 def batchinfo():
 
     entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
-    path_to_data = str(entry_df['Path to tank file'][0])
+    path_to_data = data_folder +'\\' + str(entry_df['Tank File Name'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
-    infosaveloc = entry_df['Path to tank file'][4]
-    dir_for_batch_info = entry_df['Path to tank file'][2]
+    infosaveloc = ids_folder
+    dir_for_batch_info = data_folder
 
     for i in os.listdir(dir_for_batch_info):
         information = Main_Info(path_to_file= (str(dir_for_batch_info + '/' + i)))
@@ -170,13 +174,13 @@ class CrossTheStreams():
 
 def streams():       
     entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
-    path_to_data = str(entry_df['Path to tank file'][0])
+    path_to_data = data_folder + '\\' + str(entry_df['Tank File Name'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
     start_of_stream_section = int(entry_df['Time to cut off beginning (seconds)'][0])
     end_of_stream_section = int(entry_df['Time to cut off end (seconds)'][0])
     window_size = float(entry_df['Sliding average window size (Seconds)'][0])
-    figsaveloc = str(entry_df['Path to tank file'][6])
+    figsaveloc = figures_folder
 
 
     #Create your signal stream object
@@ -378,7 +382,7 @@ class EOI_Tools():
 
 def epocs():
     entry_df= pd.ExcelFile(PATH_TO_USER_VALUES).parse()
-    path_to_data = str(entry_df['Path to tank file'][0])
+    path_to_data = data_folder + '\\' + str(entry_df['Tank File Name'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
     time_pre_epoc = int(entry_df['Time to grab before each epoc (seconds)'][0])
@@ -386,7 +390,7 @@ def epocs():
     epoc_name = str(entry_df['Epoc ID'][0])
     eoi_port = entry_df['Epoc Port to grab?'][0] #The epoc type of interest... for centering around that type of epoc later
     eoi_type = entry_df['Epoc Type?'][0]
-    figsaveloc = str(entry_df['Path to tank file'][6])
+    figsaveloc = figures_folder
     eoi_pattern = entry_df['Epoc Port to grab?'][2]
     #window_size = float(entry_df['Sliding average window size (Seconds)'][0])
 
