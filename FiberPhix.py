@@ -10,7 +10,7 @@ from scipy import stats
 from scipy.ndimage.filters import uniform_filter1d
 
 
-PATH_TO_USER_VALUES = 'PATH TO USER VALUES SPREADSHEET!\\User Values.xlsx'
+PATH_TO_USER_VALUES = os.getcwd() + '\\User Values.xlsx'
 
 
 #Class for grabbing the stream Id's and epoc Id's
