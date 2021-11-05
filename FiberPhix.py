@@ -177,8 +177,8 @@ def streams():
     path_to_data = data_folder + '\\' + str(entry_df['Tank File Name'][0])
     exp_ch_name = str(entry_df['Signal Channel ID'][0])
     control_ch_name = str(entry_df['Control Channel ID'][0])
-    start_of_stream_section = int(entry_df['Time to cut off beginning (seconds)'][0])
-    end_of_stream_section = int(entry_df['Time to cut off end (seconds)'][0])
+    start_of_stream_section = int(entry_df['Start stream collection at (seconds)'][0])
+    end_of_stream_section = int(entry_df['End stream collection at (seconds)'][0])
     window_size = float(entry_df['Sliding average window size (Seconds)'][0])
     figsaveloc = figures_folder
 
